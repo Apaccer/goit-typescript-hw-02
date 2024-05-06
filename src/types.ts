@@ -13,3 +13,9 @@ interface Image {
   likes: number;
 }
 export type RequiredFields = Required<Image>;
+
+export type RequestData = {
+  total: number;
+  total_pages: number;
+  results: RequiredFields[];
+};

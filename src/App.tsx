@@ -8,7 +8,7 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
-import { RequiredFields } from "./types";
+import { RequestData, RequiredFields } from "./types";
 
 function App() {
   const [images, setImages] = useState<RequiredFields[]>([]);
@@ -25,7 +25,8 @@ function App() {
 
     const fetchImages = async (query: string, page: number): Promise<void> => {
       try {
-        const data = await getImagesByQuery(query, page);
+        const data: RequestData = await getImagesByQuery(query, page);
+
         setImages((prevImages) => [...prevImages, ...data.results]);
         setbtnLoadMore(data.total_pages > page);
       } catch (error) {
