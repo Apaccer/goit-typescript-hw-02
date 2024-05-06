@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     if (query.length === 0) return;
 
-    const fetchImages = async (): Promise<void> => {
+    const fetchImages = async (query: string, page: number): Promise<void> => {
       try {
         const data = await getImagesByQuery(query, page);
         setImages((prevImages) => [...prevImages, ...data.results]);
@@ -34,7 +34,7 @@ function App() {
         setIsLoading(false);
       }
     };
-    fetchImages();
+    fetchImages(query, page);
   }, [query, page]);
 
   const onSetSearchQuery = (searchTerm: string) => {
