@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import SearchBar from "./components/SearchBar/SearchBar";
 import { getImagesByQuery } from "./apiServices/api";
@@ -10,21 +8,22 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
+import { RequiredFields } from "./types";
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [btnLoadMore, setbtnLoadMore] = useState(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [modalImage, setModalImage] = useState("");
+  const [images, setImages] = useState<RequiredFields[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [btnLoadMore, setbtnLoadMore] = useState<boolean>(false);
+  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<RequiredFields[]>([]);
 
   useEffect(() => {
     if (query.length === 0) return;
 
-    const fetchImages = async () => {
+    const fetchImages = async (): Promise<void> => {
       try {
         const data = await getImagesByQuery(query, page);
         setImages((prevImages) => [...prevImages, ...data.results]);
@@ -38,7 +37,7 @@ function App() {
     fetchImages();
   }, [query, page]);
 
-  const onSetSearchQuery = (searchTerm) => {
+  const onSetSearchQuery = (searchTerm: string) => {
     setQuery(searchTerm);
     setIsLoading(true);
     setError(false);
@@ -47,7 +46,7 @@ function App() {
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
-  const openModal = (id) => {
+  const openModal = (id: string): void => {
     setModalImage(images.filter((image) => image.id === id));
     setIsOpen(true);
     document.body.classList.add("modal-open");
@@ -68,7 +67,6 @@ function App() {
       {error && <ErrorMessage />}
       {btnLoadMore && <LoadMoreBtn loadMore={loadMore} images={images} />}
       <ImageModal
-        openModal={openModal}
         closeModal={closeModal}
         modalIsOpen={modalIsOpen}
         modalImage={modalImage}
